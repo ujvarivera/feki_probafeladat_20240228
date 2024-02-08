@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Contact;
 use App\Models\Project;
 use Illuminate\Http\Request;
 
@@ -13,8 +14,9 @@ class ProjectController extends Controller
     public function index()
     {
         $projects = Project::withCount('contacts')->with('contacts')->get();
+        $contacts = Contact::all();
 
-        return inertia('Projects/Index', compact('projects'));
+        return inertia('Projects/Index', compact('projects', 'contacts'));
     }
 
     /**
@@ -30,7 +32,22 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'projectName' => 'required',
+            'description' => 'required',
+            'projectStatus' => 'required',
+            'projectContacts' => 'required',
+        ]);
+
+        $project = Project::create([
+            'name' => $request->projectName,
+            'description' => $request->description,
+            'status' => $request->projectStatus,
+        ]);
+
+        $project->contacts()->sync($request->projectContacts);
+
+        return redirect()->route('projects.index')->with('success', 'Projekt sikeresen hozzáadva!');
     }
 
     /**

@@ -63,7 +63,10 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        //
+        $contactIdsOfProject = $project->contacts->pluck('id');
+        $contacts = Contact::all();
+
+        return inertia('Projects/Edit', compact('project', 'contactIdsOfProject', 'contacts'));
     }
 
     /**
@@ -71,7 +74,22 @@ class ProjectController extends Controller
      */
     public function update(Request $request, Project $project)
     {
-        //
+        $request->validate([
+            'projectName' => 'required',
+            'description' => 'required',
+            'projectStatus' => 'required',
+            'projectContacts' => 'required|array',
+        ]);
+
+        $project->update([
+            'name' => $request->projectName,
+            'description' => $request->description,
+            'status' => $request->projectStatus,
+        ]);
+
+        $project->contacts()->sync($request->projectContacts);
+
+        return redirect()->back()->with('success', 'Projekt sikeresen módosítva!');
     }
 
     /**

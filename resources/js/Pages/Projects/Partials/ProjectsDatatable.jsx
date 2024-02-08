@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link, useForm } from '@inertiajs/react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import "primereact/resources/themes/lara-light-indigo/theme.css";
@@ -14,6 +15,21 @@ export default function ProjectsDatatable({ projects }) {
 
     const statuses = useState(['fejlesztésre vár', 'folyamatban', 'kész']);
 
+    const { delete:destroy } = useForm({});
+
+    const deleteProject = (e, project) => {
+        e.preventDefault();
+        destroy(route('projects.destroy', project));
+    };
+
+    const editTemplate = (rowData) => {
+        return <Link href={route('projects.edit', rowData)}>Szerkesztés</Link>
+    };
+
+    const deleteTemplate = (rowData) => {
+        return <form onSubmit={(event) => deleteProject(event, rowData)}><button>Törlés</button></form>
+    };
+
     return (
         <div className="m-8">
             <h2 className='text-2xl'>Projektek:</h2>
@@ -24,6 +40,8 @@ export default function ProjectsDatatable({ projects }) {
                 <Column field="name" sortable header="Név"></Column>
                 <Column field="status" sortable header="Státusz" filter filterField="status"></Column>
                 <Column field="contacts_count" sortable header="Kapcsolattartók száma"></Column>
+                <Column header="" body={editTemplate}></Column>
+                <Column header="" body={deleteTemplate}></Column>
             </DataTable>
         </div>
     )

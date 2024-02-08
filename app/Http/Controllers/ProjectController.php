@@ -12,7 +12,9 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        //
+        $projects = Project::withCount('contacts')->with('contacts')->get();
+
+        return inertia('Projects/Index', compact('projects'));
     }
 
     /**

@@ -15,4 +15,13 @@ class Project extends Model
         'status'
     ];
 
+    public function contacts()
+    {
+        return $this->belongsToMany(Contact::class, 'contact_projects');
+    }
+
+    public function numberOfContacts()
+    {
+        return count($this->contacts);
+    }
 }

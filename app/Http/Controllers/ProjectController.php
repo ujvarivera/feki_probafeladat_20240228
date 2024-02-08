@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Contact;
 use App\Models\Project;
+use App\Notifications\ProjectUpdateNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 
 class ProjectController extends Controller
 {
@@ -81,6 +83,8 @@ class ProjectController extends Controller
             'projectContacts' => 'required|array',
         ]);
 
+        $projectOriginalName = $project->name;
+
         $project->update([
             'name' => $request->projectName,
             'description' => $request->description,
@@ -88,6 +92,12 @@ class ProjectController extends Controller
         ]);
 
         $project->contacts()->sync($request->projectContacts);
+
+        $changes = $project->getChanges();
+
+        if(!empty($changes)) {
+            Notification::send($project->contacts, new ProjectUpdateNotification($project, $changes, $projectOriginalName));
+        }
 
         return redirect()->back()->with('success', 'Projekt sikeresen módosítva!');
     }

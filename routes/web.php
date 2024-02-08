@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use Illuminate\Foundation\Application;
@@ -32,5 +33,6 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::resource('/projects', ProjectController::class);
+Route::resource('/contacts', ContactController::class);
 
 require __DIR__.'/auth.php';

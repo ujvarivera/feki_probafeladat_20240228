@@ -15,13 +15,16 @@ export default function ProjectsDatatable({ projects }) {
     const statuses = useState(['fejlesztésre vár', 'folyamatban', 'kész']);
 
     return (
-        <DataTable value={projects} sortField="created_at" sortOrder={-1}
-            removableSort showGridlines paginator rows={10} rowsPerPageOptions={[5, 10, 25, 50]}
-            tableStyle={{ minWidth: '50rem' }}
-            dataKey="id" filters={filters} filterDisplay="row">
-            <Column field="name" sortable header="Név"></Column>
-            <Column field="status" sortable header="Státusz" filter filterField="status"></Column>
-            <Column field="contacts_count" sortable header="Kapcsolattartók száma"></Column>
-        </DataTable>
+        <div className="m-8">
+            <h2 className='text-2xl'>Projektek:</h2>
+            <DataTable value={projects} sortField="created_at" sortOrder={-1}
+                removableSort showGridlines paginator rows={10} rowsPerPageOptions={[5, 10, 25, 50]}
+                tableStyle={{ minWidth: '50rem' }}
+                dataKey="id" filters={filters} filterDisplay="row">
+                <Column field="name" sortable header="Név"></Column>
+                <Column field="status" sortable header="Státusz" filter filterField="status"></Column>
+                <Column field="contacts_count" sortable header="Kapcsolattartók száma"></Column>
+            </DataTable>
+        </div>
     )
 }

@@ -23,8 +23,9 @@ export default function ProjectCreateForm({ contacts }) {
     };
 
     return (
-       <form onSubmit={addProject} className='mt-4'>
+       <form onSubmit={addProject} className='m-8'>
             <div className='my-4'>
+                <h2 className='text-2xl'>Új projekt:</h2>
                 <InputLabel htmlFor="projectName" value={"Projekt neve*"} />
 
                 <TextInput
